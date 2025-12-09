@@ -16,8 +16,8 @@
 [ext_resource type="Texture2D" uid="uid://cy57g3livw0y2" path="res://Assets/Character Sprites/run.png" id="12_wpjfl"]
 [ext_resource type="Texture2D" uid="uid://bivjh6qh8v4mw" path="res://Assets/Character Sprites/walk.png" id="13_bi64h"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_cvnsp"]
-radius = 9.0
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_h4iuc"]
+radius = 7.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qqcod"]
 atlas = ExtResource("2_h4iuc")
@@ -792,7 +792,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_4tc2f")
 }],
-"loop": true,
+"loop": false,
 "name": &"ledge_climb",
 "speed": 7.0
 }, {
@@ -884,20 +884,32 @@ animations = [{
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_cvnsp")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -9)
-shape = SubResource("CircleShape2D_cvnsp")
+[node name="PlayerCollider" type="CollisionShape2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(0, -15)
+shape = SubResource("CapsuleShape2D_h4iuc")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 unique_name_in_owner = true
 z_index = 5
-position = Vector2(0, -17)
+position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_ukyrk")
-animation = &"air_spin"
+animation = &"ledge_climb"
 autoplay = "idle"
-frame_progress = 0.92813104
+frame = 4
+frame_progress = 1.0
 
 [node name="CoyoteTimer" type="Timer" parent="."]
 process_callback = 0
 wait_time = 0.2
 one_shot = true
+
+[node name="LedgeClimbRayCast" type="RayCast2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(9, -33)
+target_position = Vector2(16, 15)
+
+[node name="LedgeSpaceRayCast" type="RayCast2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-16, 1)
+target_position = Vector2(0, -33)
