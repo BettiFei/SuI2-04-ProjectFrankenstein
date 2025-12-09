@@ -800,9 +800,10 @@ position = Vector2(0, -9)
 shape = SubResource("CircleShape2D_cvnsp")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+unique_name_in_owner = true
 z_index = 5
 position = Vector2(0, -17)
 sprite_frames = SubResource("SpriteFrames_ukyrk")
 animation = &"walk"
 autoplay = "idle"
-frame_progress = 0.57984763
+frame_progress = 0.23648693
