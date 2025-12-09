@@ -6,7 +6,6 @@ enum STATE {
 	FLOOR,
 	JUMP,
 	DOUBLE_JUMP,
-	FLOAT,
 	LEDGE_CLIMB,
 	LEDGE_JUMP,
 }
@@ -39,6 +38,8 @@ func switch_state(new_state: STATE) -> void:
 	# Set state-specific things that only need to run once when entering a new state:
 	match active_state:
 		STATE.FALL:
+			if previous_state == STATE.DOUBLE_JUMP:
+				await get_tree().create_timer(0.1).timeout
 			anim_sprite.play("falling")
 			if previous_state == STATE.FLOOR:
 				coyote_timer.start()
@@ -52,7 +53,7 @@ func switch_state(new_state: STATE) -> void:
 			coyote_timer.stop()
 			
 		STATE.DOUBLE_JUMP:
-			anim_sprite.play("jump")
+			anim_sprite.play("air_spin")
 			velocity.y = DOUBLE_JUMP_VELOCITY
 			can_double_jump = false
 
