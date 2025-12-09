@@ -804,6 +804,11 @@ unique_name_in_owner = true
 z_index = 5
 position = Vector2(0, -17)
 sprite_frames = SubResource("SpriteFrames_ukyrk")
-animation = &"walk"
+animation = &"roll"
 autoplay = "idle"
-frame_progress = 0.23648693
+frame_progress = 0.97338116
+
+[node name="CoyoteTimer" type="Timer" parent="."]
+process_callback = 0
+wait_time = 0.2
+one_shot = true
