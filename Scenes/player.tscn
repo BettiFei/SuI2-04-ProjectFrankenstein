@@ -15,7 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://dajx58yds8nqa" path="res://Assets/Character Sprites/ledge_climb.png" id="12_fd4e3"]
 [ext_resource type="Texture2D" uid="uid://cy57g3livw0y2" path="res://Assets/Character Sprites/run.png" id="12_wpjfl"]
 [ext_resource type="Texture2D" uid="uid://bivjh6qh8v4mw" path="res://Assets/Character Sprites/walk.png" id="13_bi64h"]
-[ext_resource type="Texture2D" uid="uid://cyeupti2lqmrc" path="res://Assets/Character Sprites/wall_slide_left.png" id="16_fd4e3"]
+[ext_resource type="Texture2D" uid="uid://dy3pf4308fitk" path="res://Assets/Character Sprites/wall_slide_right.png" id="16_fd4e3"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_h4iuc"]
 radius = 7.0
@@ -932,20 +932,18 @@ one_shot = true
 
 [node name="LedgeClimbRayCast" type="RayCast2D" parent="."]
 unique_name_in_owner = true
-visible = false
-position = Vector2(9, -33)
-target_position = Vector2(16, 15)
+position = Vector2(5, -32)
+target_position = Vector2(20, 15)
 
 [node name="LedgeSpaceRayCast" type="RayCast2D" parent="."]
 unique_name_in_owner = true
-visible = false
 position = Vector2(-16, 1)
 target_position = Vector2(0, -33)
 
 [node name="WallSlideRayCast" type="RayCast2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(-2, -20)
-target_position = Vector2(49, 0)
+target_position = Vector2(20, 0)
 
 [node name="DashCooldown" type="Timer" parent="."]
 process_callback = 0
