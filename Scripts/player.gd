@@ -210,7 +210,7 @@ func is_input_toward_facing() -> bool:
 	return signf(Input.get_axis("move_left", "move_right")) == facing_direction
 
 # returns whether what we are colliding with is a ledge:
-#func is_ledge() -> bool:
+#func is_ledge() -> bool: 
 	#return is_on_wall_only() and \
 	#ledge_climb_ray_cast.is_colliding() and \
 	#ledge_climb_ray_cast.get_collision_normal().is_equal_approx(Vector2.UP)
