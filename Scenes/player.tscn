@@ -1,4 +1,4 @@
-[gd_scene load_steps=130 format=3 uid="uid://6hmp0srgl3c5"]
+[gd_scene load_steps=134 format=3 uid="uid://6hmp0srgl3c5"]
 
 [ext_resource type="Script" uid="uid://d1nfwypn5indp" path="res://Scripts/player.gd" id="1_cvnsp"]
 [ext_resource type="Texture2D" uid="uid://1hngv6fjm5uh" path="res://Assets/Character Sprites/idle.png" id="1_v0iea"]
@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://dajx58yds8nqa" path="res://Assets/Character Sprites/ledge_climb.png" id="12_fd4e3"]
 [ext_resource type="Texture2D" uid="uid://cy57g3livw0y2" path="res://Assets/Character Sprites/run.png" id="12_wpjfl"]
 [ext_resource type="Texture2D" uid="uid://bivjh6qh8v4mw" path="res://Assets/Character Sprites/walk.png" id="13_bi64h"]
+[ext_resource type="Texture2D" uid="uid://cyeupti2lqmrc" path="res://Assets/Character Sprites/wall_slide_left.png" id="16_fd4e3"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_h4iuc"]
 radius = 7.0
@@ -467,6 +468,18 @@ region = Rect2(288, 0, 48, 48)
 atlas = ExtResource("13_bi64h")
 region = Rect2(336, 0, 48, 48)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_u5w1p"]
+atlas = ExtResource("16_fd4e3")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fnpki"]
+atlas = ExtResource("16_fd4e3")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_14ki3"]
+atlas = ExtResource("16_fd4e3")
+region = Rect2(96, 0, 48, 48)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_ukyrk"]
 animations = [{
 "frames": [{
@@ -879,9 +892,24 @@ animations = [{
 "loop": true,
 "name": &"walk",
 "speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u5w1p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fnpki")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_14ki3")
+}],
+"loop": true,
+"name": &"wall_slide",
+"speed": 8.0
 }]
 
 [node name="Player" type="CharacterBody2D"]
+z_index = 2
 script = ExtResource("1_cvnsp")
 
 [node name="PlayerCollider" type="CollisionShape2D" parent="."]
@@ -891,25 +919,35 @@ shape = SubResource("CapsuleShape2D_h4iuc")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 unique_name_in_owner = true
-z_index = 5
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_ukyrk")
-animation = &"ledge_climb"
+animation = &"wall_slide"
 autoplay = "idle"
-frame = 4
-frame_progress = 1.0
+frame_progress = 0.9370305
 
 [node name="CoyoteTimer" type="Timer" parent="."]
 process_callback = 0
-wait_time = 0.2
+wait_time = 0.1
 one_shot = true
 
 [node name="LedgeClimbRayCast" type="RayCast2D" parent="."]
 unique_name_in_owner = true
+visible = false
 position = Vector2(9, -33)
 target_position = Vector2(16, 15)
 
 [node name="LedgeSpaceRayCast" type="RayCast2D" parent="."]
 unique_name_in_owner = true
+visible = false
 position = Vector2(-16, 1)
 target_position = Vector2(0, -33)
+
+[node name="WallSlideRayCast" type="RayCast2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-2, -20)
+target_position = Vector2(49, 0)
+
+[node name="DashCooldown" type="Timer" parent="."]
+process_callback = 0
+wait_time = 0.1
+one_shot = true
