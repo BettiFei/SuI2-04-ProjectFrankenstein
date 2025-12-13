@@ -1,6 +1,9 @@
 extends CharacterBody2D
 
 
+signal enemy_hit
+
+
 enum STATE {
 	FALL,
 	FLOOR,
@@ -11,7 +14,10 @@ enum STATE {
 	WALL_SLIDE,
 	WALL_JUMP,
 	DASH,
+	ATTACK_LIGHT,
+	ATTACK_HEAVY,
 }
+
 
 const FALL_GRAVITY := 1500.0
 const FALL_VELOCITY := 500.0
@@ -27,6 +33,7 @@ const WALL_JUMP_VELOCITY := -500.0
 const DASH_LENGTH := 100.0
 const DASH_VELOCITY := 600.0
 
+
 @onready var anim_sprite: AnimatedSprite2D = %AnimatedSprite2D
 @onready var coyote_timer: Timer = $CoyoteTimer
 @onready var player_collider: CollisionShape2D = %PlayerCollider
@@ -34,6 +41,14 @@ const DASH_VELOCITY := 600.0
 @onready var ledge_space_ray_cast: RayCast2D = %LedgeSpaceRayCast
 @onready var wall_slide_ray_cast: RayCast2D = %WallSlideRayCast
 @onready var dash_cooldown: Timer = $DashCooldown
+@onready var collision_light_attack: CollisionShape2D = $HitboxLightAttack/CollisionLightAttack
+@onready var collision_heavy_attack: CollisionShape2D = $HitboxHeavyAttack/CollisionHeavyAttack
+@onready var heavy_attack_cooldown: Timer = $HeavyAttackCooldown
+
+
+@export var light_attack_damage := 5
+@export var heavy_attack_damage := 20
+
 
 var active_state := STATE.FALL
 var can_double_jump := false
@@ -42,10 +57,13 @@ var saved_position := Vector2.ZERO
 var can_dash := false
 var dash_jump_buffer := false
 
+
 func _ready() -> void:
 	switch_state(active_state) # properly start game with correct state
 	ledge_climb_ray_cast.add_exception(self) # prevent raycast from detecting player's own coll. shape
 	#print("ledge_climb_offset: " + str(ledge_climb_offset()))
+	collision_light_attack.disabled = true
+	collision_heavy_attack.disabled = true
 
 func _physics_process(delta: float) -> void:
 	process_state(delta)
@@ -112,6 +130,20 @@ func switch_state(new_state: STATE) -> void:
 			saved_position = position
 			can_dash = previous_state == STATE.FLOOR #or previous_state == STATE.WALL_SLIDE
 			dash_jump_buffer = false
+		
+		STATE.ATTACK_LIGHT:
+			collision_light_attack.disabled = false
+			anim_sprite.play("attack_light")
+			velocity.x = 0
+		
+		STATE.ATTACK_HEAVY:
+			if heavy_attack_cooldown.time_left > 0:
+				active_state = previous_state
+				return
+			collision_heavy_attack.disabled = false
+			anim_sprite.play("attack_heavy")
+			velocity.x = 0
+			heavy_attack_cooldown.start()
 
 # Called every physics frame -> put code here that needs to run every frame while in this state:
 func process_state(delta: float) -> void:
@@ -152,6 +184,10 @@ func process_state(delta: float) -> void:
 				switch_state(STATE.JUMP)
 			elif Input.is_action_just_pressed("dash"):
 				switch_state(STATE.DASH)
+			elif Input.is_action_just_pressed("attack_light"):
+				switch_state(STATE.ATTACK_LIGHT)
+			elif Input.is_action_just_pressed("attack_heavy"):
+				switch_state(STATE.ATTACK_HEAVY)
 				
 		STATE.JUMP, STATE.DOUBLE_JUMP, STATE.LEDGE_JUMP, STATE.WALL_JUMP:
 			velocity.y = move_toward(velocity.y, 0, JUMP_DECELERATION * delta)
@@ -216,6 +252,25 @@ func process_state(delta: float) -> void:
 				switch_state(STATE.LEDGE_CLIMB)
 			elif can_wall_slide():
 				switch_state(STATE.WALL_SLIDE)
+		
+		STATE.ATTACK_LIGHT:
+			if not anim_sprite.is_playing():
+				collision_light_attack.disabled = true
+				switch_state(STATE.FLOOR)
+			if Input.is_action_just_pressed("attack_heavy"):
+				await get_tree().create_timer(0.02).timeout
+				switch_state(STATE.ATTACK_HEAVY)
+			elif Input.is_action_just_pressed("attack_light"):
+				await get_tree().create_timer(0.01).timeout
+				switch_state(STATE.ATTACK_LIGHT)
+		
+		STATE.ATTACK_HEAVY:
+			if not anim_sprite.is_playing():
+				collision_heavy_attack.disabled = true
+				switch_state(STATE.FLOOR)
+			if Input.is_action_just_pressed("attack_light"):
+					await get_tree().create_timer(0.35).timeout
+					switch_state(STATE.ATTACK_LIGHT)
 
 func handle_movement(input_direction: float = 0) -> void:
 	if input_direction == 0:
@@ -233,6 +288,8 @@ func set_facing_direction(direction: float) -> void:
 		wall_slide_ray_cast.position.x = direction * absf(wall_slide_ray_cast.position.x)
 		wall_slide_ray_cast.target_position.x = direction * absf(wall_slide_ray_cast.target_position.x)
 		wall_slide_ray_cast.force_raycast_update()
+		collision_light_attack.position.x = direction * absf(collision_light_attack.position.x)
+		collision_heavy_attack.position.x = direction * absf(collision_heavy_attack.position.x)
 
 # returns whether or not player is giving input towards a ledge:
 func is_input_toward_facing() -> bool:
@@ -260,3 +317,14 @@ func ledge_climb_offset() -> Vector2:
 # check if wall slide is possible:
 func can_wall_slide() -> bool:
 	return is_on_wall_only() and wall_slide_ray_cast.is_colliding()
+
+
+func _on_hitbox_light_attack_body_entered(body: Node2D) -> void:
+	if body.is_in_group("enemy"):
+		print("Enemy hit!")
+		enemy_hit.emit(light_attack_damage)
+
+func _on_hitbox_heavy_attack_body_entered(body: Node2D) -> void:
+	if body.is_in_group("enemy"):
+		print("Enemy hit!")
+		enemy_hit.emit(heavy_attack_damage)

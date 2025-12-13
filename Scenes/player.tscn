@@ -1,4 +1,4 @@
-[gd_scene load_steps=135 format=3 uid="uid://6hmp0srgl3c5"]
+[gd_scene load_steps=137 format=3 uid="uid://6hmp0srgl3c5"]
 
 [ext_resource type="Script" uid="uid://d1nfwypn5indp" path="res://Scripts/player.gd" id="1_cvnsp"]
 [ext_resource type="Texture2D" uid="uid://1hngv6fjm5uh" path="res://Assets/Character Sprites/idle.png" id="1_v0iea"]
@@ -531,7 +531,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_xuaoq")
 }],
-"loop": true,
+"loop": false,
 "name": &"attack_heavy",
 "speed": 10.0
 }, {
@@ -566,7 +566,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_sweqm")
 }],
-"loop": true,
+"loop": false,
 "name": &"attack_light",
 "speed": 15.0
 }, {
@@ -909,6 +909,12 @@ animations = [{
 "speed": 8.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qqcod"]
+size = Vector2(15, 29)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_igrcy"]
+size = Vector2(25, 29)
+
 [node name="Player" type="CharacterBody2D"]
 z_index = 2
 script = ExtResource("1_cvnsp")
@@ -922,10 +928,9 @@ shape = SubResource("CapsuleShape2D_h4iuc")
 unique_name_in_owner = true
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_ukyrk")
-animation = &"ledge_climb"
+animation = &"attack_heavy"
 autoplay = "idle"
 frame = 4
-frame_progress = 1.0
 
 [node name="CoyoteTimer" type="Timer" parent="."]
 process_callback = 0
@@ -951,3 +956,27 @@ target_position = Vector2(20, 0)
 process_callback = 0
 wait_time = 0.1
 one_shot = true
+
+[node name="HitboxLightAttack" type="Area2D" parent="." groups=["player_attack_hitbox"]]
+
+[node name="CollisionLightAttack" type="CollisionShape2D" parent="HitboxLightAttack"]
+position = Vector2(15.5, -15.5)
+shape = SubResource("RectangleShape2D_qqcod")
+disabled = true
+debug_color = Color(0.8734848, 0.3135745, 0.39617598, 0.41960785)
+
+[node name="HitboxHeavyAttack" type="Area2D" parent="."]
+
+[node name="CollisionHeavyAttack" type="CollisionShape2D" parent="HitboxHeavyAttack"]
+position = Vector2(20.5, -15.5)
+shape = SubResource("RectangleShape2D_igrcy")
+disabled = true
+debug_color = Color(0.8745098, 0.3137255, 0.39607844, 0.41960785)
+
+[node name="HeavyAttackCooldown" type="Timer" parent="."]
+process_callback = 0
+wait_time = 0.3
+one_shot = true
+
+[connection signal="body_entered" from="HitboxLightAttack" to="." method="_on_hitbox_light_attack_body_entered"]
+[connection signal="body_entered" from="HitboxHeavyAttack" to="." method="_on_hitbox_heavy_attack_body_entered"]
