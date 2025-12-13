@@ -1,4 +1,4 @@
-[gd_scene load_steps=134 format=3 uid="uid://6hmp0srgl3c5"]
+[gd_scene load_steps=135 format=3 uid="uid://6hmp0srgl3c5"]
 
 [ext_resource type="Script" uid="uid://d1nfwypn5indp" path="res://Scripts/player.gd" id="1_cvnsp"]
 [ext_resource type="Texture2D" uid="uid://1hngv6fjm5uh" path="res://Assets/Character Sprites/idle.png" id="1_v0iea"]
@@ -12,9 +12,10 @@
 [ext_resource type="Texture2D" uid="uid://nupqh277ey5o" path="res://Assets/Character Sprites/jump.png" id="8_fs7ks"]
 [ext_resource type="Texture2D" uid="uid://cyvble5yv33r5" path="res://Assets/Character Sprites/hurt.png" id="9_l6n3p"]
 [ext_resource type="Texture2D" uid="uid://b8osdvrx4dgnn" path="res://Assets/Character Sprites/roll.png" id="11_olqyp"]
-[ext_resource type="Texture2D" uid="uid://dajx58yds8nqa" path="res://Assets/Character Sprites/ledge_climb.png" id="12_fd4e3"]
+[ext_resource type="Texture2D" uid="uid://ntdtrol88a0q" path="res://Assets/Character Sprites/ledge_climb_48x96.png" id="12_fd4e3"]
 [ext_resource type="Texture2D" uid="uid://cy57g3livw0y2" path="res://Assets/Character Sprites/run.png" id="12_wpjfl"]
 [ext_resource type="Texture2D" uid="uid://bivjh6qh8v4mw" path="res://Assets/Character Sprites/walk.png" id="13_bi64h"]
+[ext_resource type="Texture2D" uid="uid://dajx58yds8nqa" path="res://Assets/Character Sprites/ledge_climb.png" id="13_qqcod"]
 [ext_resource type="Texture2D" uid="uid://dy3pf4308fitk" path="res://Assets/Character Sprites/wall_slide_right.png" id="16_fd4e3"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_h4iuc"]
@@ -358,22 +359,22 @@ region = Rect2(240, 0, 48, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bi64h"]
 atlas = ExtResource("12_fd4e3")
-region = Rect2(0, 0, 48, 48)
+region = Rect2(0, 0, 48, 96)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_v8gx6"]
 atlas = ExtResource("12_fd4e3")
-region = Rect2(48, 0, 48, 48)
+region = Rect2(48, 0, 48, 96)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vlr8u"]
 atlas = ExtResource("12_fd4e3")
-region = Rect2(96, 0, 48, 48)
+region = Rect2(96, 0, 48, 96)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fip0x"]
-atlas = ExtResource("12_fd4e3")
+atlas = ExtResource("13_qqcod")
 region = Rect2(144, 0, 48, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4tc2f"]
-atlas = ExtResource("12_fd4e3")
+atlas = ExtResource("13_qqcod")
 region = Rect2(192, 0, 48, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_142e3"]
@@ -921,9 +922,10 @@ shape = SubResource("CapsuleShape2D_h4iuc")
 unique_name_in_owner = true
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_ukyrk")
-animation = &"wall_slide"
+animation = &"ledge_climb"
 autoplay = "idle"
-frame_progress = 0.9370305
+frame = 4
+frame_progress = 1.0
 
 [node name="CoyoteTimer" type="Timer" parent="."]
 process_callback = 0

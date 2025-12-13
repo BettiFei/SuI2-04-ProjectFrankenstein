@@ -10,7 +10,6 @@ enum STATE {
 	LEDGE_JUMP,
 	WALL_SLIDE,
 	WALL_JUMP,
-	WALL_CLIMB,
 	DASH,
 }
 
@@ -19,9 +18,12 @@ const FALL_VELOCITY := 500.0
 const WALK_VELOCITY := 200.0
 const JUMP_VELOCITY := -600.0
 const JUMP_DECELERATION := 1500.0
+const LEDGE_JUMP_VELOCITY := -500.0
 const DOUBLE_JUMP_VELOCITY := -450.0
 const WALL_SLIDE_GRAVITY := 300.0
 const WALL_SLIDE_VELOCITY := 500.0
+const WALL_JUMP_LENGTH := 30.0 # amount of pixels player is forced away from the wall
+const WALL_JUMP_VELOCITY := -500.0
 const DASH_LENGTH := 100.0
 const DASH_VELOCITY := 600.0
 
@@ -83,11 +85,21 @@ func switch_state(new_state: STATE) -> void:
 			global_position.y = ledge_climb_ray_cast.get_collision_point().y # make player face direction of ledge & align position with ledge
 			can_double_jump = true
 			
+		STATE.LEDGE_JUMP:
+			anim_sprite.play("air_spin")
+			velocity.y = LEDGE_JUMP_VELOCITY
+		
 		STATE.WALL_SLIDE:
 			anim_sprite.play("wall_slide")
 			velocity.y = 0
 			can_double_jump = true
 			can_dash = true
+			
+		STATE.WALL_JUMP:
+			anim_sprite.play("jump")
+			velocity.y = WALL_JUMP_VELOCITY
+			set_facing_direction(-facing_direction)
+			saved_position = position
 		
 		STATE.DASH:
 			if dash_cooldown.time_left > 0:
@@ -141,9 +153,17 @@ func process_state(delta: float) -> void:
 			elif Input.is_action_just_pressed("dash"):
 				switch_state(STATE.DASH)
 				
-		STATE.JUMP, STATE.DOUBLE_JUMP:
+		STATE.JUMP, STATE.DOUBLE_JUMP, STATE.LEDGE_JUMP, STATE.WALL_JUMP:
 			velocity.y = move_toward(velocity.y, 0, JUMP_DECELERATION * delta)
-			handle_movement()
+			if active_state == STATE.WALL_JUMP:
+				var distance := absf(position.x - saved_position.x)
+				if distance >= WALL_JUMP_LENGTH or can_wall_slide():
+					active_state = STATE.JUMP
+				else:
+					handle_movement(facing_direction)
+			
+			if active_state != STATE.WALL_JUMP:
+				handle_movement()
 			
 			if Input.is_action_just_pressed("jump") or velocity.y >= 0:
 				velocity.y = 0
@@ -158,6 +178,12 @@ func process_state(delta: float) -> void:
 				offset.x *= facing_direction
 				position += offset
 				switch_state(STATE.FLOOR)
+			elif Input.is_action_just_pressed("jump"):
+				var progress := inverse_lerp(0, anim_sprite.sprite_frames.get_frame_count("ledge_climb"), anim_sprite.frame)
+				var offset := ledge_climb_offset()
+				offset.x *= facing_direction * progress
+				position += offset
+				switch_state(STATE.LEDGE_JUMP)
 				
 		STATE.WALL_SLIDE:
 			velocity.y = move_toward(velocity.y, WALL_SLIDE_VELOCITY, WALL_SLIDE_GRAVITY * delta)
@@ -169,6 +195,8 @@ func process_state(delta: float) -> void:
 				switch_state(STATE.LEDGE_CLIMB)
 			elif not can_wall_slide():
 				switch_state(STATE.FALL)
+			elif Input.is_action_just_pressed("jump"):
+				switch_state(STATE.WALL_JUMP)
 		
 		STATE.DASH:
 			dash_cooldown.start()
