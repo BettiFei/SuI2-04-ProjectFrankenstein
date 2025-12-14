@@ -77,8 +77,8 @@ func switch_state(new_state: STATE) -> void:
 	# Set state-specific things that only need to run once when entering a new state:
 	match active_state:
 		STATE.FALL:
-			if previous_state == STATE.DOUBLE_JUMP:
-				await get_tree().create_timer(0.1).timeout
+			#if previous_state == STATE.DOUBLE_JUMP:
+				#await get_tree().create_timer(0.1).timeout
 			anim_sprite.play("falling")
 			if previous_state == STATE.FLOOR:
 				coyote_timer.start()
@@ -201,7 +201,9 @@ func process_state(delta: float) -> void:
 			if active_state != STATE.WALL_JUMP:
 				handle_movement()
 			
-			if Input.is_action_just_pressed("jump") or velocity.y >= 0:
+			if Input.is_action_just_pressed("jump") and active_state == STATE.JUMP and can_double_jump:
+				switch_state(STATE.DOUBLE_JUMP)
+			elif Input.is_action_just_pressed("jump") or velocity.y >= 0:
 				velocity.y = 0
 				switch_state(STATE.FALL)
 			elif Input.is_action_just_pressed("dash") and can_dash:

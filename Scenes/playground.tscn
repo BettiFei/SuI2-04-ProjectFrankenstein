@@ -83,10 +83,10 @@ position = Vector2(520, 443)
 zoom = Vector2(2.5, 2.5)
 position_smoothing_enabled = true
 
-[node name="EnemyPlant" parent="." instance=ExtResource("4_qyfof")]
+[node name="EnemyPlant" parent="." node_paths=PackedStringArray("player") instance=ExtResource("4_qyfof")]
 position = Vector2(1030, 516)
+player = NodePath("../Player")
 
-[node name="EnemyPlant2" parent="." instance=ExtResource("4_qyfof")]
+[node name="EnemyPlant2" parent="." node_paths=PackedStringArray("player") instance=ExtResource("4_qyfof")]
 position = Vector2(366, 515)
-
-[connection signal="enemy_hit" from="Player" to="EnemyPlant" method="_on_player_enemy_hit"]
+player = NodePath("../Player")
