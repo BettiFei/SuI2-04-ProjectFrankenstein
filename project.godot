@@ -15,10 +15,17 @@ run/main_scene="uid://dp8lf0be8lajn"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+Globals="*res://Scripts/globals.gd"
+
 [global_group]
 
 enemy=""
-player_attack_hitbox=""
+heavy_attack=""
+light_attack=""
+player_attack=""
+player=""
 
 [input]
 

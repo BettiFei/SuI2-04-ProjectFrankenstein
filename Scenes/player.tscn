@@ -915,7 +915,7 @@ size = Vector2(15, 29)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_igrcy"]
 size = Vector2(25, 29)
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" groups=["player"]]
 z_index = 2
 script = ExtResource("1_cvnsp")
 
@@ -957,7 +957,7 @@ process_callback = 0
 wait_time = 0.1
 one_shot = true
 
-[node name="HitboxLightAttack" type="Area2D" parent="." groups=["player_attack_hitbox"]]
+[node name="HitboxLightAttack" type="Area2D" parent="." groups=["light_attack", "player_attack"]]
 
 [node name="CollisionLightAttack" type="CollisionShape2D" parent="HitboxLightAttack"]
 position = Vector2(15.5, -15.5)
@@ -965,7 +965,7 @@ shape = SubResource("RectangleShape2D_qqcod")
 disabled = true
 debug_color = Color(0.8734848, 0.3135745, 0.39617598, 0.41960785)
 
-[node name="HitboxHeavyAttack" type="Area2D" parent="."]
+[node name="HitboxHeavyAttack" type="Area2D" parent="." groups=["heavy_attack", "player_attack"]]
 
 [node name="CollisionHeavyAttack" type="CollisionShape2D" parent="HitboxHeavyAttack"]
 position = Vector2(20.5, -15.5)

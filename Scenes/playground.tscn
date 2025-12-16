@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://crwi22jag48uh" path="res://Assets/Worldbuilding/background_tileset.png" id="1_u4ce8"]
 [ext_resource type="TileSet" uid="uid://bn7wh8ha5th3n" path="res://Resources/level_tile_set.tres" id="2_qyfof"]
 [ext_resource type="PackedScene" uid="uid://6hmp0srgl3c5" path="res://Scenes/player.tscn" id="3_3e07v"]
-[ext_resource type="PackedScene" uid="uid://baov11irfac2t" path="res://Scenes/enemy_plant.tscn" id="4_qyfof"]
+[ext_resource type="PackedScene" uid="uid://chahve4kyakar" path="res://Scenes/base_enemy.tscn" id="4_qyfof"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kry3j"]
 texture = ExtResource("1_u4ce8")
@@ -79,14 +79,6 @@ tile_set = ExtResource("2_qyfof")
 [node name="Player" parent="." instance=ExtResource("3_3e07v")]
 position = Vector2(520, 443)
 
-[node name="Camera2D" type="Camera2D" parent="Player"]
-zoom = Vector2(2.5, 2.5)
-position_smoothing_enabled = true
-
-[node name="EnemyPlant" parent="." node_paths=PackedStringArray("player") instance=ExtResource("4_qyfof")]
-position = Vector2(1030, 516)
-player = NodePath("../Player")
-
-[node name="EnemyPlant2" parent="." node_paths=PackedStringArray("player") instance=ExtResource("4_qyfof")]
-position = Vector2(366, 515)
+[node name="BaseEnemy" parent="." node_paths=PackedStringArray("player") instance=ExtResource("4_qyfof")]
+position = Vector2(361, 559)
 player = NodePath("../Player")

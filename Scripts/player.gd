@@ -1,8 +1,14 @@
 extends CharacterBody2D
 
 
-signal enemy_hit
+# -- GENERAL PLAYER VARs AND SIGNALS --
 
+@export var hp := 100
+@export var light_attack_damage := 5
+@export var heavy_attack_damage := 20
+
+
+# -- STATE ENUM, CONSTs AND VARs --
 
 enum STATE {
 	FALL,
@@ -46,10 +52,6 @@ const DASH_VELOCITY := 600.0
 @onready var heavy_attack_cooldown: Timer = $HeavyAttackCooldown
 
 
-@export var light_attack_damage := 5
-@export var heavy_attack_damage := 20
-
-
 var active_state := STATE.FALL
 var can_double_jump := false
 var facing_direction := 1.0
@@ -58,16 +60,30 @@ var can_dash := false
 var dash_jump_buffer := false
 
 
+# -- FUNCTIONS --
+
 func _ready() -> void:
 	switch_state(active_state) # properly start game with correct state
 	ledge_climb_ray_cast.add_exception(self) # prevent raycast from detecting player's own coll. shape
 	#print("ledge_climb_offset: " + str(ledge_climb_offset()))
 	collision_light_attack.disabled = true
 	collision_heavy_attack.disabled = true
+	Globals.connect("player_hit", take_damage)
 
 func _physics_process(delta: float) -> void:
 	process_state(delta)
 	move_and_slide()
+
+
+# -- FUNCTIONS HANDLING BEHAVIOUR --
+
+func take_damage(dmg) -> void:
+	print("Ouch.")
+	hp -= dmg
+	print("Player HP at ", str(hp))
+
+
+# -- FUNCTIONS HANDLING STATES --
 
 # Triggered upon input or when condition is met (e.g., if player is not on floor):
 func switch_state(new_state: STATE) -> void:
@@ -274,6 +290,10 @@ func process_state(delta: float) -> void:
 					await get_tree().create_timer(0.35).timeout
 					switch_state(STATE.ATTACK_LIGHT)
 
+
+
+# -- FUNCTIONS SUPPORTING STATES --
+
 func handle_movement(input_direction: float = 0) -> void:
 	if input_direction == 0:
 		input_direction = Input.get_axis("move_left", "move_right")
@@ -319,14 +339,3 @@ func ledge_climb_offset() -> Vector2:
 # check if wall slide is possible:
 func can_wall_slide() -> bool:
 	return is_on_wall_only() and wall_slide_ray_cast.is_colliding()
-
-
-func _on_hitbox_light_attack_body_entered(body: Node2D) -> void:
-	if body.is_in_group("enemy"):
-		print("Enemy hit!")
-		enemy_hit.emit(light_attack_damage)
-
-func _on_hitbox_heavy_attack_body_entered(body: Node2D) -> void:
-	if body.is_in_group("enemy"):
-		print("Enemy hit!")
-		enemy_hit.emit(heavy_attack_damage)
