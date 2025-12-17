@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://chahve4kyakar"]
+[gd_scene load_steps=48 format=3 uid="uid://chahve4kyakar"]
 
 [ext_resource type="Script" uid="uid://cf6ad7o88hco7" path="res://Scripts/base_enemy.gd" id="1_jfnjk"]
 [ext_resource type="Texture2D" uid="uid://4n2f4a4kwj5v" path="res://Assets/Enemies/Plant/Attack_3.png" id="1_trv5a"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://dhakw5e731q6y" path="res://Assets/Enemies/Plant/Cloud_posion.png" id="3_d1l02"]
 [ext_resource type="Texture2D" uid="uid://rx557b3t73fx" path="res://Assets/Enemies/Plant/Idle.png" id="4_jt7wd"]
 [ext_resource type="Texture2D" uid="uid://78pwl2mvcqjt" path="res://Assets/Enemies/Plant/Walk.png" id="5_6avcw"]
+[ext_resource type="Texture2D" uid="uid://b8t0hkyb3ecli" path="res://Assets/Enemies/Plant/Hurt.png" id="5_d1l02"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ghpjq"]
 atlas = ExtResource("1_trv5a")
@@ -82,6 +83,18 @@ region = Rect2(896, 0, 128, 128)
 [sub_resource type="AtlasTexture" id="AtlasTexture_v40ue"]
 atlas = ExtResource("3_d1l02")
 region = Rect2(1024, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jt7wd"]
+atlas = ExtResource("5_d1l02")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6avcw"]
+atlas = ExtResource("5_d1l02")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_70l7a"]
+atlas = ExtResource("5_d1l02")
+region = Rect2(256, 0, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_427eo"]
 atlas = ExtResource("4_jt7wd")
@@ -210,6 +223,20 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_jt7wd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6avcw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_70l7a")
+}],
+"loop": false,
+"name": &"hurt",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_427eo")
 }, {
 "duration": 1.0,
@@ -267,15 +294,19 @@ radius = 16.03122
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aq7wn"]
 size = Vector2(46, 64)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_jfnjk"]
+radius = 19.026299
+
 [node name="BaseEnemy" type="CharacterBody2D"]
 script = ExtResource("1_jfnjk")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 position = Vector2(1, -64)
 sprite_frames = SubResource("SpriteFrames_70l7a")
-animation = &"attack"
+animation = &"hurt"
 autoplay = "idle"
-frame = 4
+frame = 2
+frame_progress = 1.0
 
 [node name="EnemyCollider" type="CollisionShape2D" parent="."]
 position = Vector2(-1, -17)
@@ -287,3 +318,27 @@ shape = SubResource("CircleShape2D_fjnpf")
 position = Vector2(41, -32)
 shape = SubResource("RectangleShape2D_aq7wn")
 debug_color = Color(0.90566784, 0.2678384, 0.38101792, 0.41960785)
+
+[node name="AttackCooldown" type="Timer" parent="."]
+process_callback = 0
+wait_time = 5.0
+one_shot = true
+
+[node name="EnemyHitbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyHitbox"]
+position = Vector2(0, -17)
+shape = SubResource("CircleShape2D_jfnjk")
+debug_color = Color(0.1943109, 0.6216697, 0.46087265, 0.41960785)
+
+[node name="StaggerTimer" type="Timer" parent="."]
+process_callback = 0
+wait_time = 0.2
+one_shot = true
+
+[connection signal="animation_finished" from="AnimatedSprite" to="." method="_on_animated_sprite_animation_finished"]
+[connection signal="frame_changed" from="AnimatedSprite" to="." method="_on_animated_sprite_frame_changed"]
+[connection signal="body_entered" from="AttackHitbox" to="." method="_on_attack_hitbox_body_entered"]
+[connection signal="timeout" from="AttackCooldown" to="." method="_on_attack_cooldown_timeout"]
+[connection signal="area_entered" from="EnemyHitbox" to="." method="_on_enemy_hitbox_area_entered"]
+[connection signal="timeout" from="StaggerTimer" to="." method="_on_stagger_timer_timeout"]

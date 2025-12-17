@@ -6,8 +6,13 @@ extends CharacterBody2D
 @export var hp := 50
 @export var movement_speed := 50.0
 @export var attack_dmg := 20
+@export var attack_start_frame := 4
+@export var attack_end_frame := 6
+@export var attack_cooldown_time := 0.8
+@export var invulnerable_while_attacking := false
 @export var trigger_distance := 200.0
 @export var attack_range := 40.0
+@export var staggered_time := 0.2
 
 
 enum EnemyState {
@@ -19,20 +24,33 @@ enum EnemyState {
 	DIE,
 }
 
+const HURT_COLOR := Color("eb402f")
+const BASE_COLOR := Color(1, 1, 1, 1)
+
 var active_state := EnemyState.IDLE
-var distance_from_player
-var starting_position
-var movement_target
+var distance_from_player : float
+var starting_position : Vector2
+var movement_target : Vector2 # position of target (e.g., player, starting_pos)
+
+var can_attack := true
+var staggered := false
 
 @onready var anim_sprite: AnimatedSprite2D = $AnimatedSprite
+@onready var enemy_hitbox: Area2D = $EnemyHitbox
+@onready var attack_collider: CollisionShape2D = $AttackHitbox/CollisionShape2D
+@onready var attack_cooldown: Timer = $AttackCooldown
+@onready var stagger_timer: Timer = $StaggerTimer
 
 
 
 func _ready() -> void:
 	switch_state(EnemyState.IDLE)
 	starting_position = global_position
-	get_distance_from_player()
-	print(distance_from_player)
+	attack_collider.set_deferred("disabled", true)
+	attack_cooldown.wait_time = attack_cooldown_time
+	stagger_timer.wait_time = staggered_time
+	#get_distance_from_player()
+	#print(distance_from_player)
 
 func _physics_process(delta: float) -> void:
 	get_distance_from_player()
@@ -46,6 +64,12 @@ func switch_state(new_state : EnemyState) -> void:
 	
 	if active_state == new_state:
 		return
+	
+	if active_state == EnemyState.HURT and new_state != EnemyState.HURT:
+		anim_sprite.modulate = BASE_COLOR
+	
+	if active_state == EnemyState.ATTACK:
+		attack_collider.set_deferred("disabled", true)
 	
 	active_state = new_state
 	
@@ -62,26 +86,39 @@ func switch_state(new_state : EnemyState) -> void:
 			print("Switched to RETURN state.")
 			
 		EnemyState.ATTACK:
-			print("Switched to ATTACK state.")
+			if not can_attack:
+				switch_state(previous_state)
+				return
+			#await get_tree().create_timer(0.5).timeout
+			anim_sprite.play("attack")
 		
 		EnemyState.HURT:
-			print("Switched to HURT state.")
+			anim_sprite.modulate = HURT_COLOR
+			print("Enemy hit. Enemy hp now at: ", str(hp))
+			anim_sprite.play("hurt")
+			staggered = true
+			stagger_timer.start()
 			
 		EnemyState.DIE:
-			print("Switched to DIE state.")
+			print("Enemy dead.")
+			anim_sprite.play("die")
 
 func process_state(delta: float) -> void:
 	match active_state:
 		
 		EnemyState.IDLE:
 			if distance_from_player <= trigger_distance:
-				switch_state(EnemyState.CHASE)
+				if can_attack or distance_from_player > attack_range:
+					switch_state(EnemyState.CHASE)
 				
 		EnemyState.CHASE:
 			movement_target = player.global_position
 			handle_movement()
 			if distance_from_player <= attack_range:
-				switch_state(EnemyState.ATTACK)
+				if can_attack:
+					switch_state(EnemyState.ATTACK)
+				else:
+					switch_state(EnemyState.IDLE)
 			elif distance_from_player > trigger_distance and absf(global_position.x - starting_position.x) > 2.0:
 				switch_state(EnemyState.RETURN)
 				
@@ -90,21 +127,23 @@ func process_state(delta: float) -> void:
 			handle_movement()
 			if absf(global_position.x - starting_position.x) < 2.0:
 				switch_state(EnemyState.IDLE)
+			elif distance_from_player <= trigger_distance:
+				switch_state(EnemyState.CHASE)
 				
 		EnemyState.ATTACK:
 			velocity.x = 0
-			anim_sprite.play("attack")
 			if distance_from_player > attack_range:
 				switch_state(EnemyState.CHASE)
 			elif distance_from_player > trigger_distance:
-				#return to starting_position
-				switch_state(EnemyState.IDLE)
+				switch_state(EnemyState.RETURN)
 				
 		EnemyState.HURT:
-			print("Processing HURT state.")
+			velocity.x = 0
+			if not staggered:
+				switch_state(EnemyState.IDLE)
 		
 		EnemyState.DIE:
-			print("Processing DIE state.")
+			velocity.x = 0
 
 
 # -- SUPPORTING FUNCTIONS --
@@ -122,10 +161,59 @@ func get_direction_to_target(target : Vector2) -> float:
 		return -1.0
 
 func set_facing_direction(direction) -> void:
-	anim_sprite.flip_h = direction < 0
+	if direction:
+		anim_sprite.flip_h = direction < 0
+		attack_collider.position.x = direction * absf(attack_collider.position.x)
 
 func handle_movement():
 	var direction := get_direction_to_target(movement_target)
 	set_facing_direction(direction)
 	velocity.x = direction * movement_speed
 	move_and_slide()
+
+func take_damage(dmg):
+	if active_state == EnemyState.ATTACK and invulnerable_while_attacking:
+		return
+	
+	hp -= dmg
+	if hp > 0:
+		switch_state(EnemyState.HURT)
+	elif hp <= 0:
+		switch_state(EnemyState.DIE)
+
+
+# -- HANDLING SIGNALS --
+
+func _on_attack_cooldown_timeout() -> void:
+	can_attack = true
+
+func _on_attack_hitbox_body_entered(body: Node2D) -> void: # have I hit the player?
+	if body.is_in_group("player"):
+		Globals.player_hit.emit(attack_dmg)
+		can_attack = false
+		attack_cooldown.start()
+
+func _on_animated_sprite_frame_changed() -> void:
+	if active_state != EnemyState.ATTACK:
+		return
+	
+	if anim_sprite.frame == attack_start_frame:
+		attack_collider.set_deferred("disabled", false)
+	elif anim_sprite.frame == attack_end_frame:
+		attack_collider.set_deferred("disabled", true)
+
+func _on_animated_sprite_animation_finished() -> void:
+	if anim_sprite.animation == "attack" and active_state == EnemyState.ATTACK:
+		switch_state(EnemyState.IDLE)
+	elif anim_sprite.animation == "die" and active_state == EnemyState.DIE:
+		queue_free()
+
+func _on_enemy_hitbox_area_entered(area: Area2D) -> void: # has the player hit me?
+	if area.is_in_group("player_attack"):
+		if area.is_in_group("light_attack"):
+			take_damage(player.light_attack_damage)
+		elif area.is_in_group("heavy_attack"):
+			take_damage(player.heavy_attack_damage)
+
+func _on_stagger_timer_timeout() -> void:
+	staggered = false
