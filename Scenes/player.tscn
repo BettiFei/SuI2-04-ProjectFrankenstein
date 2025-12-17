@@ -703,7 +703,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_w4w4b")
 }],
-"loop": true,
+"loop": false,
 "name": &"death",
 "speed": 8.0
 }, {
@@ -728,7 +728,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_5cld6")
 }],
-"loop": true,
+"loop": false,
 "name": &"hurt",
 "speed": 8.0
 }, {
@@ -928,9 +928,10 @@ shape = SubResource("CapsuleShape2D_h4iuc")
 unique_name_in_owner = true
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_ukyrk")
-animation = &"attack_heavy"
+animation = &"death"
 autoplay = "idle"
-frame = 4
+frame = 9
+frame_progress = 1.0
 
 [node name="CoyoteTimer" type="Timer" parent="."]
 process_callback = 0

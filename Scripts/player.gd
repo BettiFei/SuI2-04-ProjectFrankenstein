@@ -22,6 +22,8 @@ enum STATE {
 	DASH,
 	ATTACK_LIGHT,
 	ATTACK_HEAVY,
+	HURT,
+	DIE,
 }
 
 
@@ -81,6 +83,10 @@ func take_damage(dmg) -> void:
 	print("Ouch.")
 	hp -= dmg
 	print("Player HP at ", str(hp))
+	if hp > 0:
+		switch_state(STATE.HURT)
+	elif hp <= 0:
+		switch_state(STATE.DIE)
 
 
 # -- FUNCTIONS HANDLING STATES --
@@ -160,6 +166,12 @@ func switch_state(new_state: STATE) -> void:
 			anim_sprite.play("attack_heavy")
 			velocity.x = 0
 			heavy_attack_cooldown.start()
+			
+		STATE.HURT:
+			anim_sprite.play("hurt")
+		
+		STATE.DIE:
+			anim_sprite.play("death")
 
 # Called every physics frame -> put code here that needs to run every frame while in this state:
 func process_state(delta: float) -> void:
@@ -289,6 +301,17 @@ func process_state(delta: float) -> void:
 			if Input.is_action_just_pressed("attack_light"):
 					await get_tree().create_timer(0.35).timeout
 					switch_state(STATE.ATTACK_LIGHT)
+					
+		STATE.HURT:
+			velocity.x = 0
+			if not anim_sprite.is_playing():
+				switch_state(STATE.FLOOR)
+		
+		STATE.DIE:
+			velocity.x = 0
+			if not anim_sprite.is_playing():
+				Globals.player_died.emit()
+				print("Player died.")
 
 
 

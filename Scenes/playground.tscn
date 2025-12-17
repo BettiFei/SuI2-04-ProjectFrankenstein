@@ -1,5 +1,6 @@
-[gd_scene load_steps=7 format=4 uid="uid://dp8lf0be8lajn"]
+[gd_scene load_steps=8 format=4 uid="uid://dp8lf0be8lajn"]
 
+[ext_resource type="Script" uid="uid://debblfeff55jo" path="res://Scripts/game_manager.gd" id="1_3e07v"]
 [ext_resource type="Texture2D" uid="uid://crwi22jag48uh" path="res://Assets/Worldbuilding/background_tileset.png" id="1_u4ce8"]
 [ext_resource type="TileSet" uid="uid://bn7wh8ha5th3n" path="res://Resources/level_tile_set.tres" id="2_qyfof"]
 [ext_resource type="PackedScene" uid="uid://6hmp0srgl3c5" path="res://Scenes/player.tscn" id="3_3e07v"]
@@ -64,6 +65,9 @@ texture = ExtResource("1_u4ce8")
 sources/0 = SubResource("TileSetAtlasSource_kry3j")
 
 [node name="Playground" type="Node2D"]
+
+[node name="GameManager" type="Node" parent="."]
+script = ExtResource("1_3e07v")
 
 [node name="Worldbuilding" type="Node" parent="."]
 
