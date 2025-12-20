@@ -1,10 +1,12 @@
-[gd_scene load_steps=8 format=4 uid="uid://dp8lf0be8lajn"]
+[gd_scene load_steps=13 format=4 uid="uid://dp8lf0be8lajn"]
 
 [ext_resource type="Script" uid="uid://debblfeff55jo" path="res://Scripts/game_manager.gd" id="1_3e07v"]
 [ext_resource type="Texture2D" uid="uid://crwi22jag48uh" path="res://Assets/Worldbuilding/background_tileset.png" id="1_u4ce8"]
 [ext_resource type="TileSet" uid="uid://bn7wh8ha5th3n" path="res://Resources/level_tile_set.tres" id="2_qyfof"]
 [ext_resource type="PackedScene" uid="uid://6hmp0srgl3c5" path="res://Scenes/player.tscn" id="3_3e07v"]
 [ext_resource type="PackedScene" uid="uid://chahve4kyakar" path="res://Scenes/base_enemy.tscn" id="4_qyfof"]
+[ext_resource type="FontFile" uid="uid://mdgqlt3nfvl" path="res://Assets/Fonts/PixelOperator8-Bold.ttf" id="6_opmy1"]
+[ext_resource type="FontFile" uid="uid://bhew4rsb5842f" path="res://Assets/Fonts/PixelOperator8.ttf" id="7_wqftc"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kry3j"]
 texture = ExtResource("1_u4ce8")
@@ -64,6 +66,27 @@ texture = ExtResource("1_u4ce8")
 [sub_resource type="TileSet" id="TileSet_21xkr"]
 sources/0 = SubResource("TileSetAtlasSource_kry3j")
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m3lqc"]
+bg_color = Color(0.1438936, 0.42018282, 0.528691, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6hjy0"]
+bg_color = Color(0.08264331, 0.27607423, 0.35314894, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_73bjl"]
+bg_color = Color(0.11654825, 0.35518062, 0.45042205, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
 [node name="Playground" type="Node2D"]
 
 [node name="GameManager" type="Node" parent="."]
@@ -89,3 +112,70 @@ player = NodePath("../Player")
 [node name="BaseEnemy2" parent="." node_paths=PackedStringArray("player") instance=ExtResource("4_qyfof")]
 position = Vector2(787, 530)
 player = NodePath("../Player")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+process_mode = 3
+
+[node name="GameOverScreen" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/GameOverScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.67058825)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/GameOverScreen"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -43.5
+offset_top = -46.5
+offset_right = 43.5
+offset_bottom = 46.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/GameOverScreen/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("6_opmy1")
+theme_override_font_sizes/font_size = 32
+text = "You died."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/GameOverScreen/VBoxContainer"]
+layout_mode = 2
+
+[node name="ReplayButton" type="Button" parent="CanvasLayer/GameOverScreen/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+theme_override_fonts/font = ExtResource("7_wqftc")
+theme_override_styles/normal = SubResource("StyleBoxFlat_m3lqc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_6hjy0")
+theme_override_styles/hover = SubResource("StyleBoxFlat_73bjl")
+text = "play again"
+
+[node name="QuitButton" type="Button" parent="CanvasLayer/GameOverScreen/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("7_wqftc")
+theme_override_styles/normal = SubResource("StyleBoxFlat_m3lqc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_6hjy0")
+theme_override_styles/hover = SubResource("StyleBoxFlat_73bjl")
+text = "quit"
+
+[connection signal="pressed" from="CanvasLayer/GameOverScreen/VBoxContainer/HBoxContainer/ReplayButton" to="GameManager" method="_on_replay_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/GameOverScreen/VBoxContainer/HBoxContainer/QuitButton" to="GameManager" method="_on_quit_button_pressed"]

@@ -306,6 +306,7 @@ func process_state(delta: float) -> void:
 		STATE.DIE:
 			velocity.x = 0
 			if not anim_sprite.is_playing():
+				Engine.time_scale = 1
 				Globals.player_died.emit()
 				print("Player died.")
 
@@ -340,6 +341,7 @@ func take_damage(dmg) -> void:
 	if hp > 0:
 		switch_state(STATE.HURT)
 	elif hp <= 0:
+		Engine.time_scale = 0.5
 		switch_state(STATE.DIE)
 
 func disable_attack_colliders() -> void:
