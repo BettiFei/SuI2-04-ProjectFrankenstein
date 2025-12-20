@@ -1,6 +1,7 @@
 extends Node
 
 @export var end_of_game_screen : CanvasLayer
+@export var ui : CanvasLayer
 
 @onready var end_of_game_message: Label = $EndOfGameScreen/Control/VBoxContainer/EndOfGameMessage
 
@@ -11,6 +12,7 @@ func _ready() -> void:
 	get_tree().paused = false
 	Globals.player_died.connect(handle_game_over)
 	Globals.victory.connect(handle_victory)
+	ui.show()
 	end_of_game_screen.hide()
 
 
@@ -20,14 +22,16 @@ func _process(_delta: float) -> void:
 
 
 func handle_game_over():
-	print("Received signal 'player_died'.")
+	#print("Received signal 'player_died'.")
+	ui.hide()
 	get_tree().paused = true
 	end_of_game_message.text = "You died."
 	end_of_game_screen.show()
 
 
 func handle_victory():
-	print("Received signal 'victory'.")
+	#print("Received signal 'victory'.")
+	ui.hide()
 	get_tree().paused = true
 	end_of_game_message.text = "You won."
 	end_of_game_screen.show()

@@ -160,6 +160,7 @@ _data = {
 
 [node name="Fruit" type="Area2D"]
 script = ExtResource("1_j64f1")
+heal_amount = 30
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_o20pv")

@@ -309,7 +309,7 @@ func process_state(delta: float) -> void:
 			if not anim_sprite.is_playing():
 				Engine.time_scale = 1
 				Globals.player_died.emit()
-				print("Player died.")
+				#print("Player died.")
 
 
 
@@ -335,10 +335,10 @@ func set_facing_direction(direction: float) -> void:
 		collision_heavy_attack.position.x = direction * absf(collision_heavy_attack.position.x)
 
 func take_damage(dmg) -> void:
-	print("Ouch.")
+	#print("Ouch.")
 	hp -= dmg
 	health_bar.value = hp
-	print("Player HP at ", str(hp))
+	#print("Player HP at ", str(hp))
 	if hp > 0:
 		switch_state(STATE.HURT)
 	elif hp <= 0:

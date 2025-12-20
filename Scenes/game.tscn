@@ -1,18 +1,43 @@
-[gd_scene load_steps=19 format=4 uid="uid://dj4tsxx1svjmd"]
+[gd_scene load_steps=26 format=4 uid="uid://dj4tsxx1svjmd"]
 
 [ext_resource type="Texture2D" uid="uid://cfvtq1p2kw0p0" path="res://Assets/Worldbuilding/Swamp/BG_3.png" id="1_3dryh"]
 [ext_resource type="Texture2D" uid="uid://nluonja7kt5r" path="res://Assets/Worldbuilding/Swamp/BG_1.png" id="1_ebmjs"]
 [ext_resource type="PackedScene" uid="uid://b4238gcdkeqh5" path="res://Scenes/game_manager.tscn" id="1_v158k"]
+[ext_resource type="FontFile" uid="uid://mdgqlt3nfvl" path="res://Assets/Fonts/PixelOperator8-Bold.ttf" id="2_1phco"]
 [ext_resource type="Texture2D" uid="uid://cmq7xw7qbmn54" path="res://Assets/Worldbuilding/Swamp/BG_2.png" id="2_wowpa"]
+[ext_resource type="FontFile" uid="uid://bhew4rsb5842f" path="res://Assets/Fonts/PixelOperator8.ttf" id="3_nb51f"]
+[ext_resource type="StyleBox" uid="uid://bvqhyt87r1dhu" path="res://Resources/button_normal.tres" id="4_ewbju"]
 [ext_resource type="Texture2D" uid="uid://doynqwqmtypjo" path="res://Assets/Worldbuilding/Swamp/Terrain_and_Props.png" id="4_i6g32"]
+[ext_resource type="StyleBox" uid="uid://c18rl8sw5mqwq" path="res://Resources/button_pressed.tres" id="5_85qyi"]
 [ext_resource type="PackedScene" uid="uid://cm5o7hipsy8yw" path="res://Scenes/platform.tscn" id="5_i6g32"]
 [ext_resource type="PackedScene" uid="uid://6hmp0srgl3c5" path="res://Scenes/player.tscn" id="5_wowpa"]
 [ext_resource type="Script" uid="uid://crjcce7ynmgsl" path="res://Scripts/death_zone.gd" id="6_1l0tm"]
+[ext_resource type="StyleBox" uid="uid://c6g3733lwovth" path="res://Resources/button_hovered.tres" id="6_iivbl"]
 [ext_resource type="PackedScene" uid="uid://box12po6vjng2" path="res://Scenes/coin.tscn" id="6_o5yvi"]
-[ext_resource type="PackedScene" uid="uid://dmg86ue23xlc3" path="res://Scenes/end_of_game_screen.tscn" id="9_h4fw4"]
 [ext_resource type="PackedScene" uid="uid://chahve4kyakar" path="res://Scenes/base_enemy.tscn" id="9_ldgsr"]
 [ext_resource type="PackedScene" uid="uid://bkh46q8xlea1q" path="res://Scenes/fruit.tscn" id="12_rku1e"]
 [ext_resource type="PackedScene" uid="uid://copt337d7l0dn" path="res://Scenes/ui.tscn" id="13_rfjv2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7nbq1"]
+bg_color = Color(0.3254902, 0.43137255, 0.7058824, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_exi56"]
+bg_color = Color(0.22352941, 0.2509804, 0.4117647, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7t8sx"]
+bg_color = Color(0.39607844, 0.6117647, 0.9137255, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1l0tm"]
 texture = ExtResource("4_i6g32")
@@ -320,11 +345,80 @@ sources/0 = SubResource("TileSetAtlasSource_1l0tm")
 
 [node name="Game" type="Node2D"]
 
-[node name="GameManager" parent="." node_paths=PackedStringArray("end_of_game_screen") instance=ExtResource("1_v158k")]
+[node name="GameManager" parent="." node_paths=PackedStringArray("end_of_game_screen", "ui") instance=ExtResource("1_v158k")]
 process_mode = 3
 end_of_game_screen = NodePath("EndOfGameScreen")
+ui = NodePath("../UI")
 
-[node name="EndOfGameScreen" parent="GameManager" instance=ExtResource("9_h4fw4")]
+[node name="EndOfGameScreen" type="CanvasLayer" parent="GameManager"]
+process_mode = 3
+
+[node name="Control" type="Control" parent="GameManager/EndOfGameScreen"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+
+[node name="ColorRect" type="ColorRect" parent="GameManager/EndOfGameScreen/Control"]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.8235294)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameManager/EndOfGameScreen/Control"]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -118.0
+offset_top = -30.0
+offset_right = 118.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="EndOfGameMessage" type="Label" parent="GameManager/EndOfGameScreen/Control/VBoxContainer"]
+process_mode = 3
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("2_1phco")
+theme_override_font_sizes/font_size = 32
+text = "You won."
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GameManager/EndOfGameScreen/Control/VBoxContainer"]
+process_mode = 3
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ReplayButton" type="Button" parent="GameManager/EndOfGameScreen/Control/VBoxContainer/HBoxContainer"]
+process_mode = 3
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_nb51f")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7nbq1")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_exi56")
+theme_override_styles/hover = SubResource("StyleBoxFlat_7t8sx")
+text = "play again"
+
+[node name="QuitButton" type="Button" parent="GameManager/EndOfGameScreen/Control/VBoxContainer/HBoxContainer"]
+process_mode = 3
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("3_nb51f")
+theme_override_styles/normal = ExtResource("4_ewbju")
+theme_override_styles/pressed = ExtResource("5_85qyi")
+theme_override_styles/hover = ExtResource("6_iivbl")
+text = "quit"
 
 [node name="Worldbuilding" type="Node" parent="."]
 
@@ -497,5 +591,3 @@ position = Vector2(2355, 51)
 [connection signal="pressed" from="GameManager/EndOfGameScreen/Control/VBoxContainer/HBoxContainer/ReplayButton" to="GameManager" method="_on_replay_button_pressed"]
 [connection signal="pressed" from="GameManager/EndOfGameScreen/Control/VBoxContainer/HBoxContainer/QuitButton" to="GameManager" method="_on_quit_button_pressed"]
 [connection signal="body_entered" from="Worldbuilding/DeathZone" to="Worldbuilding/DeathZone" method="_on_body_entered"]
-
-[editable path="GameManager/EndOfGameScreen"]

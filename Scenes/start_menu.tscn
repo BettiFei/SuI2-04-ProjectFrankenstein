@@ -1,0 +1,174 @@
+[gd_scene load_steps=10 format=3 uid="uid://d3y8iy6brl5dt"]
+
+[ext_resource type="Texture2D" uid="uid://cfvtq1p2kw0p0" path="res://Assets/Worldbuilding/Swamp/BG_3.png" id="1_626he"]
+[ext_resource type="Script" uid="uid://bl5adisn7xjaw" path="res://Scripts/start_menu.gd" id="1_ru7em"]
+[ext_resource type="Texture2D" uid="uid://cmq7xw7qbmn54" path="res://Assets/Worldbuilding/Swamp/BG_2.png" id="2_8u0lp"]
+[ext_resource type="Texture2D" uid="uid://nluonja7kt5r" path="res://Assets/Worldbuilding/Swamp/BG_1.png" id="3_i2i62"]
+[ext_resource type="FontFile" uid="uid://mdgqlt3nfvl" path="res://Assets/Fonts/PixelOperator8-Bold.ttf" id="4_lfskg"]
+[ext_resource type="FontFile" uid="uid://bhew4rsb5842f" path="res://Assets/Fonts/PixelOperator8.ttf" id="5_ru7em"]
+[ext_resource type="StyleBox" uid="uid://bvqhyt87r1dhu" path="res://Resources/button_normal.tres" id="7_77ila"]
+[ext_resource type="StyleBox" uid="uid://c18rl8sw5mqwq" path="res://Resources/button_pressed.tres" id="8_00l4x"]
+[ext_resource type="StyleBox" uid="uid://c6g3733lwovth" path="res://Resources/button_hovered.tres" id="9_7vuks"]
+
+[node name="StartMenu" type="Node2D"]
+script = ExtResource("1_ru7em")
+
+[node name="Background" type="Node" parent="."]
+
+[node name="Sprite2D3" type="Sprite2D" parent="Background"]
+position = Vector2(-469, 0)
+texture = ExtResource("1_626he")
+centered = false
+
+[node name="Sprite2D2" type="Sprite2D" parent="Background"]
+position = Vector2(-469, 0)
+texture = ExtResource("2_8u0lp")
+centered = false
+
+[node name="Sprite2D" type="Sprite2D" parent="Background"]
+position = Vector2(-469, 0)
+texture = ExtResource("3_i2i62")
+centered = false
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -234.0
+offset_top = -230.0
+offset_right = 234.0
+offset_bottom = -38.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_lfskg")
+theme_override_font_sizes/font_size = 32
+text = "Swamp Adventure"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_ru7em")
+theme_override_font_sizes/font_size = 16
+text = "jump"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_ru7em")
+theme_override_font_sizes/font_size = 16
+text = "double jump"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label3" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_ru7em")
+theme_override_font_sizes/font_size = 16
+text = "dash"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label4" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_ru7em")
+theme_override_font_sizes/font_size = 16
+text = "light attack"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label5" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_ru7em")
+theme_override_font_sizes/font_size = 16
+text = "heavy attack"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_ru7em")
+theme_override_font_sizes/font_size = 16
+text = "space"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_ru7em")
+theme_override_font_sizes/font_size = 16
+text = "space"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label3" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_ru7em")
+theme_override_font_sizes/font_size = 16
+text = "shift"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label4" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_ru7em")
+theme_override_font_sizes/font_size = 16
+text = "left mouse"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label5" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("5_ru7em")
+theme_override_font_sizes/font_size = 16
+text = "right mouse"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PlayButton" type="Button" parent="CanvasLayer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("5_ru7em")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = ExtResource("7_77ila")
+theme_override_styles/pressed = ExtResource("8_00l4x")
+theme_override_styles/hover = ExtResource("9_7vuks")
+text = "play"
+
+[node name="QuitButton" type="Button" parent="CanvasLayer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("5_ru7em")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = ExtResource("7_77ila")
+theme_override_styles/pressed = ExtResource("8_00l4x")
+theme_override_styles/hover = ExtResource("9_7vuks")
+text = "quit"
+
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/HBoxContainer2/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/HBoxContainer2/QuitButton" to="." method="_on_quit_button_pressed"]

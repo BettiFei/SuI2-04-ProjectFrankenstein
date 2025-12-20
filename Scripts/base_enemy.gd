@@ -91,7 +91,8 @@ func switch_state(new_state : EnemyState) -> void:
 			anim_sprite.play("move")
 			
 		EnemyState.RETURN:
-			print("Switched to RETURN state.")
+			return
+			#print("Switched to RETURN state.")
 			
 		EnemyState.ATTACK:
 			if not can_attack:
@@ -102,13 +103,13 @@ func switch_state(new_state : EnemyState) -> void:
 		
 		EnemyState.HURT:
 			anim_sprite.modulate = HURT_COLOR
-			print("Enemy hit. Enemy hp now at: ", str(hp))
+			#print("Enemy hit. Enemy hp now at: ", str(hp))
 			anim_sprite.play("hurt")
 			staggered = true
 			stagger_timer.start()
 			
 		EnemyState.DIE:
-			print("Enemy dead.")
+			#print("Enemy dead.")
 			anim_sprite.play("die")
 
 func process_state(_delta: float) -> void:

@@ -12,7 +12,7 @@ var collected := 0
 func _ready() -> void:
 	Globals.connect("coin_collected", add_coin)
 	total = get_tree().get_nodes_in_group("coin").size()
-	collected = 16
+	collected = 0
 	coins_total.text = str(total)
 	coins_collected.text = str(collected)
 
