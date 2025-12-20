@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dk1rw2ixgeo2a"
-path="res://.godot/imported/level_tileset.png-bef5f1bd82e5f4701e2049a060d448d6.ctex"
+uid="uid://bpsbx270tu6v3"
+path="res://.godot/imported/BG_3_alt.png-424b131614fe1a0b32fb0232beba3abe.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Worldbuilding/level_tileset.png"
-dest_files=["res://.godot/imported/level_tileset.png-bef5f1bd82e5f4701e2049a060d448d6.ctex"]
+source_file="res://Assets/Worldbuilding/Swamp/BG_3_alt.png"
+dest_files=["res://.godot/imported/BG_3_alt.png-424b131614fe1a0b32fb0232beba3abe.ctex"]
 
 [params]
 

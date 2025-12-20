@@ -307,7 +307,9 @@ corner_radius_bottom_left = 2
 
 [node name="BaseEnemy" type="CharacterBody2D"]
 z_index = 1
+scale = Vector2(0.7, 0.7)
 script = ExtResource("1_jfnjk")
+attack_cooldown_time = 1.2
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
 position = Vector2(1, -64)

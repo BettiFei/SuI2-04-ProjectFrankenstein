@@ -1,0 +1,95 @@
+[gd_scene load_steps=6 format=3 uid="uid://dmg86ue23xlc3"]
+
+[ext_resource type="FontFile" uid="uid://mdgqlt3nfvl" path="res://Assets/Fonts/PixelOperator8-Bold.ttf" id="1_jb6in"]
+[ext_resource type="FontFile" uid="uid://bhew4rsb5842f" path="res://Assets/Fonts/PixelOperator8.ttf" id="2_y8man"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m3lqc"]
+bg_color = Color(0.1438936, 0.42018282, 0.528691, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6hjy0"]
+bg_color = Color(0.08264331, 0.27607423, 0.35314894, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_73bjl"]
+bg_color = Color(0.11654825, 0.35518062, 0.45042205, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[node name="GameOverScreen" type="CanvasLayer"]
+process_mode = 3
+
+[node name="Control" type="Control" parent="."]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.67058825)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -128.0
+offset_top = -46.5
+offset_right = 128.0
+offset_bottom = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Control/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_jb6in")
+theme_override_font_sizes/font_size = 32
+text = "You died."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/VBoxContainer"]
+process_mode = 3
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ReplayButton" type="Button" parent="Control/VBoxContainer/HBoxContainer"]
+process_mode = 3
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_stretch_ratio = 0.0
+theme_override_fonts/font = ExtResource("2_y8man")
+theme_override_styles/normal = SubResource("StyleBoxFlat_m3lqc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_6hjy0")
+theme_override_styles/hover = SubResource("StyleBoxFlat_73bjl")
+text = "play again"
+
+[node name="QuitButton" type="Button" parent="Control/VBoxContainer/HBoxContainer"]
+process_mode = 3
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_fonts/font = ExtResource("2_y8man")
+theme_override_styles/normal = SubResource("StyleBoxFlat_m3lqc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_6hjy0")
+theme_override_styles/hover = SubResource("StyleBoxFlat_73bjl")
+text = "quit"

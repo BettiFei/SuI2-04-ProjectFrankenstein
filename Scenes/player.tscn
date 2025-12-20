@@ -924,7 +924,7 @@ corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
-z_index = 2
+z_index = 5
 script = ExtResource("1_cvnsp")
 
 [node name="PlayerCollider" type="CollisionShape2D" parent="."]

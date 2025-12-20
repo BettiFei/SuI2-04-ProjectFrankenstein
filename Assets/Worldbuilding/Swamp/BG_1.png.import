@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://crwi22jag48uh"
-path="res://.godot/imported/background_tileset.png-ed4d57265626a012acaeea134a076726.ctex"
+uid="uid://nluonja7kt5r"
+path="res://.godot/imported/BG_1.png-13fd0a7b37405070def3630275110629.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Worldbuilding/background_tileset.png"
-dest_files=["res://.godot/imported/background_tileset.png-ed4d57265626a012acaeea134a076726.ctex"]
+source_file="res://Assets/Worldbuilding/Swamp/BG_1.png"
+dest_files=["res://.godot/imported/BG_1.png-13fd0a7b37405070def3630275110629.ctex"]
 
 [params]
 

@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://cm5o7hipsy8yw"]
+
+[ext_resource type="Texture2D" uid="uid://doynqwqmtypjo" path="res://Assets/Worldbuilding/Swamp/Terrain_and_Props.png" id="1_1rc8e"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8q6su"]
+size = Vector2(78, 12)
+
+[node name="Platform" type="AnimatableBody2D"]
+z_index = 1
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_1rc8e")
+region_enabled = true
+region_rect = Rect2(81, 160, 78, 13)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1)
+shape = SubResource("RectangleShape2D_8q6su")
+one_way_collision = true

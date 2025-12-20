@@ -1,10 +1,11 @@
 extends Node
 
-@onready var game_over_screen: Control = $"../CanvasLayer/GameOverScreen"
+@export var game_over_screen : CanvasLayer
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	Engine.time_scale = 1
 	get_tree().paused = false
 	Globals.player_died.connect(game_over)
 	game_over_screen.hide()
