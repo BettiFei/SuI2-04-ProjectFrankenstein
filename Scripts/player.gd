@@ -52,6 +52,7 @@ const DASH_VELOCITY := 600.0
 @onready var collision_light_attack: CollisionShape2D = $HitboxLightAttack/CollisionLightAttack
 @onready var collision_heavy_attack: CollisionShape2D = $HitboxHeavyAttack/CollisionHeavyAttack
 @onready var heavy_attack_cooldown: Timer = $HeavyAttackCooldown
+@onready var health_bar: ProgressBar = $HealthBar
 
 
 var active_state := STATE.FALL
@@ -71,6 +72,8 @@ func _ready() -> void:
 	collision_light_attack.disabled = true
 	collision_heavy_attack.disabled = true
 	Globals.connect("player_hit", take_damage)
+	health_bar.max_value = hp
+	health_bar.value = health_bar.max_value
 
 func _physics_process(delta: float) -> void:
 	process_state(delta)
@@ -82,6 +85,7 @@ func _physics_process(delta: float) -> void:
 func take_damage(dmg) -> void:
 	print("Ouch.")
 	hp -= dmg
+	health_bar.value = hp
 	print("Player HP at ", str(hp))
 	if hp > 0:
 		switch_state(STATE.HURT)

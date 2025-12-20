@@ -84,6 +84,9 @@ tile_set = ExtResource("2_qyfof")
 position = Vector2(520, 443)
 
 [node name="BaseEnemy" parent="." node_paths=PackedStringArray("player") instance=ExtResource("4_qyfof")]
-z_index = 1
 position = Vector2(275, 343)
+player = NodePath("../Player")
+
+[node name="BaseEnemy2" parent="." node_paths=PackedStringArray("player") instance=ExtResource("4_qyfof")]
+position = Vector2(787, 530)
 player = NodePath("../Player")

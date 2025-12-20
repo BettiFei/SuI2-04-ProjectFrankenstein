@@ -43,6 +43,7 @@ var staggered := false
 @onready var attack_cooldown: Timer = $AttackCooldown
 @onready var stagger_timer: Timer = $StaggerTimer
 @onready var edge_check: RayCast2D = $EdgeCheck
+@onready var health_bar: ProgressBar = $HealthBar
 
 
 
@@ -54,6 +55,8 @@ func _ready() -> void:
 	stagger_timer.wait_time = staggered_time
 	#get_horizontal_distance_from_player()
 	#print(distance_from_player)
+	health_bar.max_value = hp
+	health_bar.value = health_bar.max_value
 
 func _physics_process(delta: float) -> void:
 	apply_gravity(delta)
@@ -200,6 +203,7 @@ func take_damage(dmg):
 		return
 	
 	hp -= dmg
+	health_bar.value = hp
 	if hp > 0:
 		switch_state(EnemyState.HURT)
 	elif hp <= 0:

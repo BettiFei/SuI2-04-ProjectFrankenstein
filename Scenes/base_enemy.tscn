@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://chahve4kyakar"]
+[gd_scene load_steps=50 format=3 uid="uid://chahve4kyakar"]
 
 [ext_resource type="Script" uid="uid://cf6ad7o88hco7" path="res://Scripts/base_enemy.gd" id="1_jfnjk"]
 [ext_resource type="Texture2D" uid="uid://4n2f4a4kwj5v" path="res://Assets/Enemies/Plant/Attack_3.png" id="1_trv5a"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://rx557b3t73fx" path="res://Assets/Enemies/Plant/Idle.png" id="4_jt7wd"]
 [ext_resource type="Texture2D" uid="uid://78pwl2mvcqjt" path="res://Assets/Enemies/Plant/Walk.png" id="5_6avcw"]
 [ext_resource type="Texture2D" uid="uid://b8t0hkyb3ecli" path="res://Assets/Enemies/Plant/Hurt.png" id="5_d1l02"]
+[ext_resource type="StyleBox" uid="uid://k55f5ilao2s0" path="res://Resources/health_bar_bg.tres" id="8_6avcw"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ghpjq"]
 atlas = ExtResource("1_trv5a")
@@ -297,7 +298,15 @@ size = Vector2(46, 64)
 [sub_resource type="CircleShape2D" id="CircleShape2D_jfnjk"]
 radius = 19.026299
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jt7wd"]
+bg_color = Color(0.9244074, 0.25395328, 0.2546067, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
 [node name="BaseEnemy" type="CharacterBody2D"]
+z_index = 1
 script = ExtResource("1_jfnjk")
 
 [node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
@@ -341,6 +350,16 @@ position = Vector2(12, 4)
 exclude_parent = false
 target_position = Vector2(0, 32)
 hit_from_inside = true
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+offset_left = -23.0
+offset_top = -71.0
+offset_right = 23.0
+offset_bottom = -63.0
+theme_override_styles/background = ExtResource("8_6avcw")
+theme_override_styles/fill = SubResource("StyleBoxFlat_jt7wd")
+value = 80.0
+show_percentage = false
 
 [connection signal="animation_finished" from="AnimatedSprite" to="." method="_on_animated_sprite_animation_finished"]
 [connection signal="frame_changed" from="AnimatedSprite" to="." method="_on_animated_sprite_frame_changed"]

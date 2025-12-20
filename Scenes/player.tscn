@@ -1,4 +1,4 @@
-[gd_scene load_steps=137 format=3 uid="uid://6hmp0srgl3c5"]
+[gd_scene load_steps=139 format=3 uid="uid://6hmp0srgl3c5"]
 
 [ext_resource type="Script" uid="uid://d1nfwypn5indp" path="res://Scripts/player.gd" id="1_cvnsp"]
 [ext_resource type="Texture2D" uid="uid://1hngv6fjm5uh" path="res://Assets/Character Sprites/idle.png" id="1_v0iea"]
@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://bivjh6qh8v4mw" path="res://Assets/Character Sprites/walk.png" id="13_bi64h"]
 [ext_resource type="Texture2D" uid="uid://dajx58yds8nqa" path="res://Assets/Character Sprites/ledge_climb.png" id="13_qqcod"]
 [ext_resource type="Texture2D" uid="uid://dy3pf4308fitk" path="res://Assets/Character Sprites/wall_slide_right.png" id="16_fd4e3"]
+[ext_resource type="StyleBox" uid="uid://6annuf7u1s0c" path="res://Resources/health_bar_fill.tres" id="18_igrcy"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_h4iuc"]
 radius = 7.0
@@ -915,6 +916,13 @@ size = Vector2(15, 29)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_igrcy"]
 size = Vector2(25, 29)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fs7ks"]
+bg_color = Color(0.23753911, 0.23753914, 0.23753902, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 z_index = 2
 script = ExtResource("1_cvnsp")
@@ -928,10 +936,8 @@ shape = SubResource("CapsuleShape2D_h4iuc")
 unique_name_in_owner = true
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_ukyrk")
-animation = &"death"
+animation = &"idle"
 autoplay = "idle"
-frame = 9
-frame_progress = 1.0
 
 [node name="CoyoteTimer" type="Timer" parent="."]
 process_callback = 0
@@ -978,6 +984,20 @@ debug_color = Color(0.8745098, 0.3137255, 0.39607844, 0.41960785)
 process_callback = 0
 wait_time = 0.3
 one_shot = true
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -23.0
+offset_top = -46.0
+offset_right = 23.0
+offset_bottom = -38.0
+grow_horizontal = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_fs7ks")
+theme_override_styles/fill = ExtResource("18_igrcy")
+value = 80.0
+show_percentage = false
 
 [connection signal="body_entered" from="HitboxLightAttack" to="." method="_on_hitbox_light_attack_body_entered"]
 [connection signal="body_entered" from="HitboxHeavyAttack" to="." method="_on_hitbox_heavy_attack_body_entered"]
