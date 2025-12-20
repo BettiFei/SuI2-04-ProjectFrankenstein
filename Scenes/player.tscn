@@ -936,7 +936,7 @@ shape = SubResource("CapsuleShape2D_h4iuc")
 unique_name_in_owner = true
 position = Vector2(0, -16)
 sprite_frames = SubResource("SpriteFrames_ukyrk")
-animation = &"idle"
+animation = &"attack_heavy"
 autoplay = "idle"
 
 [node name="CoyoteTimer" type="Timer" parent="."]
@@ -999,5 +999,6 @@ theme_override_styles/fill = ExtResource("18_igrcy")
 value = 80.0
 show_percentage = false
 
+[connection signal="frame_changed" from="AnimatedSprite2D" to="." method="_on_animated_sprite_frame_changed"]
 [connection signal="body_entered" from="HitboxLightAttack" to="." method="_on_hitbox_light_attack_body_entered"]
 [connection signal="body_entered" from="HitboxHeavyAttack" to="." method="_on_hitbox_heavy_attack_body_entered"]

@@ -111,7 +111,7 @@ func switch_state(new_state : EnemyState) -> void:
 			print("Enemy dead.")
 			anim_sprite.play("die")
 
-func process_state(delta: float) -> void:
+func process_state(_delta: float) -> void:
 	match active_state:
 		
 		EnemyState.IDLE:

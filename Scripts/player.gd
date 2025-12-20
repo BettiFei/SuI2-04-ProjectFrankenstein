@@ -63,14 +63,14 @@ var can_dash := false
 var dash_jump_buffer := false
 
 
+
 # -- FUNCTIONS --
 
 func _ready() -> void:
 	switch_state(active_state) # properly start game with correct state
 	ledge_climb_ray_cast.add_exception(self) # prevent raycast from detecting player's own coll. shape
 	#print("ledge_climb_offset: " + str(ledge_climb_offset()))
-	collision_light_attack.disabled = true
-	collision_heavy_attack.disabled = true
+	disable_attack_colliders()
 	Globals.connect("player_hit", take_damage)
 	health_bar.max_value = hp
 	health_bar.value = health_bar.max_value
@@ -80,24 +80,16 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 
-# -- FUNCTIONS HANDLING BEHAVIOUR --
-
-func take_damage(dmg) -> void:
-	print("Ouch.")
-	hp -= dmg
-	health_bar.value = hp
-	print("Player HP at ", str(hp))
-	if hp > 0:
-		switch_state(STATE.HURT)
-	elif hp <= 0:
-		switch_state(STATE.DIE)
-
 
 # -- FUNCTIONS HANDLING STATES --
 
 # Triggered upon input or when condition is met (e.g., if player is not on floor):
 func switch_state(new_state: STATE) -> void:
 	var previous_state := active_state
+	
+	if active_state == STATE.ATTACK_LIGHT or STATE.ATTACK_HEAVY:
+		disable_attack_colliders()
+	
 	active_state = new_state
 	
 	# Set state-specific things that only need to run once when entering a new state:
@@ -158,7 +150,7 @@ func switch_state(new_state: STATE) -> void:
 			dash_jump_buffer = false
 		
 		STATE.ATTACK_LIGHT:
-			collision_light_attack.disabled = false
+			#collision_light_attack.disabled = false
 			anim_sprite.play("attack_light")
 			velocity.x = 0
 		
@@ -166,7 +158,7 @@ func switch_state(new_state: STATE) -> void:
 			if heavy_attack_cooldown.time_left > 0:
 				active_state = previous_state
 				return
-			collision_heavy_attack.disabled = false
+			#collision_heavy_attack.disabled = false
 			anim_sprite.play("attack_heavy")
 			velocity.x = 0
 			heavy_attack_cooldown.start()
@@ -340,6 +332,20 @@ func set_facing_direction(direction: float) -> void:
 		collision_light_attack.position.x = direction * absf(collision_light_attack.position.x)
 		collision_heavy_attack.position.x = direction * absf(collision_heavy_attack.position.x)
 
+func take_damage(dmg) -> void:
+	print("Ouch.")
+	hp -= dmg
+	health_bar.value = hp
+	print("Player HP at ", str(hp))
+	if hp > 0:
+		switch_state(STATE.HURT)
+	elif hp <= 0:
+		switch_state(STATE.DIE)
+
+func disable_attack_colliders() -> void:
+	collision_light_attack.set_deferred("disabled", true)
+	collision_heavy_attack.set_deferred("disabled", true)
+
 # returns whether or not player is giving input towards a ledge:
 func is_input_toward_facing() -> bool:
 	return signf(Input.get_axis("move_left", "move_right")) == facing_direction
@@ -366,3 +372,23 @@ func ledge_climb_offset() -> Vector2:
 # check if wall slide is possible:
 func can_wall_slide() -> bool:
 	return is_on_wall_only() and wall_slide_ray_cast.is_colliding()
+
+
+
+# -- FUNCTIONS HANDLING SIGNALS --
+
+func _on_animated_sprite_frame_changed() -> void:
+	#if active_state != STATE.ATTACK_LIGHT or STATE.ATTACK_HEAVY:
+		#return
+	
+	if active_state == STATE.ATTACK_LIGHT:
+		if anim_sprite.frame == 1:
+			collision_light_attack.set_deferred("disabled", false)
+		elif anim_sprite.frame == 3:
+			collision_light_attack.set_deferred("disabled", true)
+	
+	elif active_state == STATE.ATTACK_HEAVY:
+		if anim_sprite.frame == 4:
+			collision_heavy_attack.set_deferred("disabled", false)
+		elif anim_sprite.frame == 6:
+			collision_heavy_attack.set_deferred("disabled", true)
