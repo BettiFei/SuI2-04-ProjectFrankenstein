@@ -26,6 +26,7 @@ heavy_attack=""
 light_attack=""
 player_attack=""
 player=""
+coin=""
 
 [input]
 

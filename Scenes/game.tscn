@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=4 uid="uid://dj4tsxx1svjmd"]
+[gd_scene load_steps=19 format=4 uid="uid://dj4tsxx1svjmd"]
 
 [ext_resource type="Texture2D" uid="uid://cfvtq1p2kw0p0" path="res://Assets/Worldbuilding/Swamp/BG_3.png" id="1_3dryh"]
 [ext_resource type="Texture2D" uid="uid://nluonja7kt5r" path="res://Assets/Worldbuilding/Swamp/BG_1.png" id="1_ebmjs"]
@@ -8,8 +8,11 @@
 [ext_resource type="PackedScene" uid="uid://cm5o7hipsy8yw" path="res://Scenes/platform.tscn" id="5_i6g32"]
 [ext_resource type="PackedScene" uid="uid://6hmp0srgl3c5" path="res://Scenes/player.tscn" id="5_wowpa"]
 [ext_resource type="Script" uid="uid://crjcce7ynmgsl" path="res://Scripts/death_zone.gd" id="6_1l0tm"]
-[ext_resource type="PackedScene" uid="uid://dmg86ue23xlc3" path="res://Scenes/game_over_screen.tscn" id="9_h4fw4"]
+[ext_resource type="PackedScene" uid="uid://box12po6vjng2" path="res://Scenes/coin.tscn" id="6_o5yvi"]
+[ext_resource type="PackedScene" uid="uid://dmg86ue23xlc3" path="res://Scenes/end_of_game_screen.tscn" id="9_h4fw4"]
 [ext_resource type="PackedScene" uid="uid://chahve4kyakar" path="res://Scenes/base_enemy.tscn" id="9_ldgsr"]
+[ext_resource type="PackedScene" uid="uid://bkh46q8xlea1q" path="res://Scenes/fruit.tscn" id="12_rku1e"]
+[ext_resource type="PackedScene" uid="uid://copt337d7l0dn" path="res://Scenes/ui.tscn" id="13_rfjv2"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1l0tm"]
 texture = ExtResource("4_i6g32")
@@ -317,12 +320,11 @@ sources/0 = SubResource("TileSetAtlasSource_1l0tm")
 
 [node name="Game" type="Node2D"]
 
-[node name="GameManager" parent="." node_paths=PackedStringArray("game_over_screen") instance=ExtResource("1_v158k")]
+[node name="GameManager" parent="." node_paths=PackedStringArray("end_of_game_screen") instance=ExtResource("1_v158k")]
 process_mode = 3
-game_over_screen = NodePath("GameOverScreen")
+end_of_game_screen = NodePath("EndOfGameScreen")
 
-[node name="GameOverScreen" parent="GameManager" instance=ExtResource("9_h4fw4")]
-visible = false
+[node name="EndOfGameScreen" parent="GameManager" instance=ExtResource("9_h4fw4")]
 
 [node name="Worldbuilding" type="Node" parent="."]
 
@@ -408,24 +410,92 @@ limit_bottom = 440
 limit_smoothed = true
 position_smoothing_enabled = true
 
-[node name="BaseEnemy" parent="." node_paths=PackedStringArray("player") instance=ExtResource("9_ldgsr")]
-position = Vector2(697, 317)
-player = NodePath("../Player")
+[node name="Coins" type="Node" parent="."]
 
-[node name="BaseEnemy2" parent="." node_paths=PackedStringArray("player") instance=ExtResource("9_ldgsr")]
-position = Vector2(1660, 336)
-player = NodePath("../Player")
+[node name="Coin" parent="Coins" instance=ExtResource("6_o5yvi")]
+position = Vector2(396, 182)
 
-[node name="BaseEnemy3" parent="." node_paths=PackedStringArray("player") instance=ExtResource("9_ldgsr")]
-position = Vector2(2301, 336)
-player = NodePath("../Player")
+[node name="Coin2" parent="Coins" instance=ExtResource("6_o5yvi")]
+position = Vector2(718, 252)
 
-[node name="BaseEnemy4" parent="." node_paths=PackedStringArray("player") instance=ExtResource("9_ldgsr")]
+[node name="Coin3" parent="Coins" instance=ExtResource("6_o5yvi")]
+position = Vector2(702, 252)
+
+[node name="Coin4" parent="Coins" instance=ExtResource("6_o5yvi")]
+position = Vector2(540, 147)
+
+[node name="Coin5" parent="Coins" instance=ExtResource("6_o5yvi")]
+position = Vector2(1502, 378)
+
+[node name="Coin6" parent="Coins" instance=ExtResource("6_o5yvi")]
+position = Vector2(1502, 356)
+
+[node name="Coin7" parent="Coins" instance=ExtResource("6_o5yvi")]
+position = Vector2(1502, 333)
+
+[node name="Coin8" parent="Coins" instance=ExtResource("6_o5yvi")]
+position = Vector2(1943, 322)
+
+[node name="Coin9" parent="Coins" instance=ExtResource("6_o5yvi")]
+position = Vector2(1964, 322)
+
+[node name="Coin10" parent="Coins" instance=ExtResource("6_o5yvi")]
+position = Vector2(1986, 322)
+
+[node name="Coin11" parent="Coins" instance=ExtResource("6_o5yvi")]
+position = Vector2(2196, 153)
+
+[node name="Coin12" parent="Coins" instance=ExtResource("6_o5yvi")]
+position = Vector2(2214, 153)
+
+[node name="Coin13" parent="Coins" instance=ExtResource("6_o5yvi")]
+position = Vector2(1984, 87)
+
+[node name="Coin14" parent="Coins" instance=ExtResource("6_o5yvi")]
+position = Vector2(2007, 87)
+
+[node name="Coin15" parent="Coins" instance=ExtResource("6_o5yvi")]
+position = Vector2(1639, 25)
+
+[node name="Coin16" parent="Coins" instance=ExtResource("6_o5yvi")]
+position = Vector2(1391, 292)
+
+[node name="Coin17" parent="Coins" instance=ExtResource("6_o5yvi")]
+position = Vector2(1391, 316)
+
+[node name="Enemies" type="Node" parent="."]
+
+[node name="BaseEnemy" parent="Enemies" node_paths=PackedStringArray("player") instance=ExtResource("9_ldgsr")]
+position = Vector2(678, 317)
+player = NodePath("../../Player")
+
+[node name="BaseEnemy2" parent="Enemies" node_paths=PackedStringArray("player") instance=ExtResource("9_ldgsr")]
+position = Vector2(1881, 336)
+player = NodePath("../../Player")
+
+[node name="BaseEnemy3" parent="Enemies" node_paths=PackedStringArray("player") instance=ExtResource("9_ldgsr")]
+position = Vector2(2033, 336)
+player = NodePath("../../Player")
+
+[node name="BaseEnemy4" parent="Enemies" node_paths=PackedStringArray("player") instance=ExtResource("9_ldgsr")]
 position = Vector2(1337, 384)
-player = NodePath("../Player")
+player = NodePath("../../Player")
 
-[connection signal="pressed" from="GameManager/GameOverScreen/Control/VBoxContainer/HBoxContainer/ReplayButton" to="GameManager" method="_on_replay_button_pressed"]
-[connection signal="pressed" from="GameManager/GameOverScreen/Control/VBoxContainer/HBoxContainer/QuitButton" to="GameManager" method="_on_quit_button_pressed"]
+[node name="Fruit" type="Node" parent="."]
+
+[node name="Fruit" parent="Fruit" instance=ExtResource("12_rku1e")]
+position = Vector2(740, 57)
+
+[node name="Fruit2" parent="Fruit" instance=ExtResource("12_rku1e")]
+position = Vector2(1450, 137)
+
+[node name="Fruit3" parent="Fruit" instance=ExtResource("12_rku1e")]
+position = Vector2(2355, 51)
+
+[node name="UI" parent="." instance=ExtResource("13_rfjv2")]
+
+[connection signal="pressed" from="GameManager/EndOfGameScreen/Control/VBoxContainer/HBoxContainer/ReplayButton" to="GameManager" method="_on_replay_button_pressed"]
+[connection signal="pressed" from="GameManager/EndOfGameScreen/Control/VBoxContainer/HBoxContainer/QuitButton" to="GameManager" method="_on_quit_button_pressed"]
 [connection signal="body_entered" from="Worldbuilding/DeathZone" to="Worldbuilding/DeathZone" method="_on_body_entered"]
 
-[editable path="GameManager/GameOverScreen"]
+[editable path="GameManager/EndOfGameScreen"]

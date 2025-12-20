@@ -5,7 +5,7 @@
 [ext_resource type="TileSet" uid="uid://bn7wh8ha5th3n" path="res://Resources/level_tile_set.tres" id="2_qyfof"]
 [ext_resource type="PackedScene" uid="uid://6hmp0srgl3c5" path="res://Scenes/player.tscn" id="3_3e07v"]
 [ext_resource type="PackedScene" uid="uid://chahve4kyakar" path="res://Scenes/base_enemy.tscn" id="4_qyfof"]
-[ext_resource type="PackedScene" uid="uid://dmg86ue23xlc3" path="res://Scenes/game_over_screen.tscn" id="6_vl51c"]
+[ext_resource type="PackedScene" uid="uid://dmg86ue23xlc3" path="res://Scenes/end_of_game_screen.tscn" id="6_vl51c"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kry3j"]
 texture = ExtResource("1_u4ce8")

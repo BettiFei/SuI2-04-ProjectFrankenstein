@@ -72,6 +72,7 @@ func _ready() -> void:
 	#print("ledge_climb_offset: " + str(ledge_climb_offset()))
 	disable_attack_colliders()
 	Globals.connect("player_hit", take_damage)
+	Globals.connect("fruit_eaten", heal)
 	health_bar.max_value = hp
 	health_bar.value = health_bar.max_value
 
@@ -343,6 +344,10 @@ func take_damage(dmg) -> void:
 	elif hp <= 0:
 		Engine.time_scale = 0.5
 		switch_state(STATE.DIE)
+
+func heal(amount) -> void:
+	hp += amount
+	health_bar.value = hp
 
 func disable_attack_colliders() -> void:
 	collision_light_attack.set_deferred("disabled", true)
