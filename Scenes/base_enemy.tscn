@@ -336,6 +336,12 @@ process_callback = 0
 wait_time = 0.2
 one_shot = true
 
+[node name="EdgeCheck" type="RayCast2D" parent="."]
+position = Vector2(12, 4)
+exclude_parent = false
+target_position = Vector2(0, 32)
+hit_from_inside = true
+
 [connection signal="animation_finished" from="AnimatedSprite" to="." method="_on_animated_sprite_animation_finished"]
 [connection signal="frame_changed" from="AnimatedSprite" to="." method="_on_animated_sprite_frame_changed"]
 [connection signal="body_entered" from="AttackHitbox" to="." method="_on_attack_hitbox_body_entered"]

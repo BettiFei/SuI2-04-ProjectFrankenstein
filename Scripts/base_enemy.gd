@@ -13,6 +13,7 @@ extends CharacterBody2D
 @export var trigger_distance := 200.0
 @export var attack_range := 40.0
 @export var staggered_time := 0.2
+@export var gravity := 1200.0
 
 
 enum EnemyState {
@@ -26,6 +27,7 @@ enum EnemyState {
 
 const HURT_COLOR := Color("eb402f")
 const BASE_COLOR := Color(1, 1, 1, 1)
+const MAX_VERTICAL_DETECTION := 32.0
 
 var active_state := EnemyState.IDLE
 var distance_from_player : float
@@ -40,6 +42,7 @@ var staggered := false
 @onready var attack_collider: CollisionShape2D = $AttackHitbox/CollisionShape2D
 @onready var attack_cooldown: Timer = $AttackCooldown
 @onready var stagger_timer: Timer = $StaggerTimer
+@onready var edge_check: RayCast2D = $EdgeCheck
 
 
 
@@ -49,12 +52,14 @@ func _ready() -> void:
 	attack_collider.set_deferred("disabled", true)
 	attack_cooldown.wait_time = attack_cooldown_time
 	stagger_timer.wait_time = staggered_time
-	#get_distance_from_player()
+	#get_horizontal_distance_from_player()
 	#print(distance_from_player)
 
 func _physics_process(delta: float) -> void:
-	get_distance_from_player()
+	apply_gravity(delta)
+	get_horizontal_distance_from_player()
 	process_state(delta)
+	move_and_slide()
 
 
 # -- HANDLING STATES --
@@ -107,14 +112,14 @@ func process_state(delta: float) -> void:
 	match active_state:
 		
 		EnemyState.IDLE:
-			if distance_from_player <= trigger_distance:
+			if distance_from_player <= trigger_distance and is_player_on_same_level():
 				if can_attack or distance_from_player > attack_range:
 					switch_state(EnemyState.CHASE)
 				
 		EnemyState.CHASE:
 			movement_target = player.global_position
 			handle_movement()
-			if distance_from_player <= attack_range:
+			if distance_from_player <= attack_range and is_player_on_same_level():
 				if can_attack:
 					switch_state(EnemyState.ATTACK)
 				else:
@@ -132,7 +137,9 @@ func process_state(delta: float) -> void:
 				
 		EnemyState.ATTACK:
 			velocity.x = 0
-			if distance_from_player > attack_range:
+			if not is_player_on_same_level():
+				switch_state(EnemyState.IDLE)
+			elif distance_from_player > attack_range:
 				switch_state(EnemyState.CHASE)
 			elif distance_from_player > trigger_distance:
 				switch_state(EnemyState.RETURN)
@@ -148,11 +155,17 @@ func process_state(delta: float) -> void:
 
 # -- SUPPORTING FUNCTIONS --
 
-func get_distance_from_player():
+func get_horizontal_distance_from_player():
 	if player == null:
 		return
 	distance_from_player = absf(player.global_position.x - global_position.x)
 	return distance_from_player
+
+func get_vertical_distance_from_player() -> float:
+	return absf(player.global_position.y - global_position.y)
+
+func is_player_on_same_level() -> bool:
+	return get_vertical_distance_from_player() <= MAX_VERTICAL_DETECTION
 
 func get_direction_to_target(target : Vector2) -> float:
 	if target.x > global_position.x:
@@ -163,13 +176,24 @@ func get_direction_to_target(target : Vector2) -> float:
 func set_facing_direction(direction) -> void:
 	if direction:
 		anim_sprite.flip_h = direction < 0
+		edge_check.position.x = direction * absf(edge_check.position.x)
+		edge_check.target_position.x = direction * absf(edge_check.target_position.x)
 		attack_collider.position.x = direction * absf(attack_collider.position.x)
+
+func apply_gravity(delta):
+	if not is_on_floor():
+		velocity.y += gravity * delta
 
 func handle_movement():
 	var direction := get_direction_to_target(movement_target)
 	set_facing_direction(direction)
+	
+	if is_on_floor() and not edge_check.is_colliding():
+		velocity.x = 0
+		return
+	
 	velocity.x = direction * movement_speed
-	move_and_slide()
+	#move_and_slide()
 
 func take_damage(dmg):
 	if active_state == EnemyState.ATTACK and invulnerable_while_attacking:
